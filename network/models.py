@@ -17,7 +17,16 @@ class Contact(models.Model):
 
 
 class Product(models.Model):
-    pass
+    name = models.CharField(max_length=50, verbose_name='название')
+    model = models.CharField(max_length=50, verbose_name='модель')
+    start_sales_date = models.DateField(auto_now_add=True, verbose_name='дата начала продаж')
+
+    def __str__(self):
+        return f'{self.name} {self.model}'
+
+    class Meta:
+        verbose_name = 'продукт'
+        verbose_name_plural = 'продукты'
 
 
 class Company(models.Model):
