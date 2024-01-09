@@ -29,7 +29,7 @@ class Product(models.Model):
         verbose_name_plural = 'продукты'
 
 
-class Company(models.Model):
+class Link(models.Model):
     class LinkType(models.TextChoices):
         factory = 'Factory', 'Завод'
         company = 'Company', 'ИП'
@@ -40,6 +40,7 @@ class Company(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, verbose_name='контакты')
     products = models.ManyToManyField(Product, blank=True, verbose_name='продукты')
     provider = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name='поставщик', blank=True, null=True)
+    debt = models.DecimalField(max_digits=11, decimal_places=2, verbose_name='задолженность перед поставщиком')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     level = models.IntegerField(default=0, verbose_name='уровень иерархии')
 
