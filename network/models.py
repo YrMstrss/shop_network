@@ -45,8 +45,8 @@ class Link(models.Model):
     level = models.IntegerField(default=0, verbose_name='уровень иерархии')
 
     def __str__(self):
-        return f'ИП "{self.name}"'
+        return f'Звено сети "{self.name}"'
 
     class Meta:
-        verbose_name = 'ИП'
-        verbose_name_plural = 'ИП'
+        verbose_name = 'Звено сети'
+        verbose_name_plural = 'Звенья сети'
