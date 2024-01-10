@@ -1,21 +1,6 @@
 from django.db import models
 
 
-class Contact(models.Model):
-    email = models.EmailField(verbose_name='email')
-    country = models.CharField(max_length=50, verbose_name='страна')
-    city = models.CharField(max_length=100, verbose_name='город')
-    street = models.CharField(max_length=100, verbose_name='улица')
-    building = models.CharField(max_length=5, verbose_name='номер дома')
-
-    def __str__(self):
-        return f'{self.email}'
-
-    class Meta:
-        verbose_name = 'контакты'
-        verbose_name_plural = 'контакты'
-
-
 class Product(models.Model):
     name = models.CharField(max_length=50, verbose_name='название')
     model = models.CharField(max_length=50, verbose_name='модель')
@@ -37,7 +22,6 @@ class Link(models.Model):
 
     link_type = models.CharField(max_length=7, choices=LinkType.choices, verbose_name='тип звена сети')
     name = models.CharField(max_length=30, verbose_name='название')
-    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, verbose_name='контакты')
     products = models.ManyToManyField(Product, blank=True, verbose_name='продукты')
     provider = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name='поставщик', blank=True, null=True)
     debt = models.DecimalField(max_digits=11, decimal_places=2, verbose_name='задолженность перед поставщиком')
@@ -50,3 +34,20 @@ class Link(models.Model):
     class Meta:
         verbose_name = 'Звено сети'
         verbose_name_plural = 'Звенья сети'
+
+
+class Contact(models.Model):
+    email = models.EmailField(verbose_name='email')
+    country = models.CharField(max_length=50, verbose_name='страна')
+    city = models.CharField(max_length=100, verbose_name='город')
+    street = models.CharField(max_length=100, verbose_name='улица')
+    building = models.CharField(max_length=5, verbose_name='номер дома')
+
+    link = models.OneToOneField(Link, on_delete=models.CASCADE, related_name='contact', verbose_name='звено', null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.email}'
+
+    class Meta:
+        verbose_name = 'контакты'
+        verbose_name_plural = 'контакты'
