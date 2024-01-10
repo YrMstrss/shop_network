@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 
 from network.models import Link
@@ -29,6 +30,8 @@ class LinkListAPIView(generics.ListAPIView):
 class LinkRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = LinkSerializer
     queryset = Link.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ('contact__country', )
 
 
 class LinkUpdateAPIVIew(generics.UpdateAPIView):
