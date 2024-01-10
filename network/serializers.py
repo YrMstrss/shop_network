@@ -9,7 +9,7 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class LinkSerializer(serializers.ModelSerializer):
+class LinkCreateSerializer(serializers.ModelSerializer):
     contact = ContactSerializer()
 
     class Meta:
@@ -23,3 +23,11 @@ class LinkSerializer(serializers.ModelSerializer):
         Contact.objects.create(**contact, link=link)
 
         return link
+
+
+class LinkSerializer(serializers.ModelSerializer):
+    contact = ContactSerializer()
+
+    class Meta:
+        model = Link
+        fields = '__all__'
