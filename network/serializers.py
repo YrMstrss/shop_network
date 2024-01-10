@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from network.models import Link, Contact
-from network.validators import LinkFactoryProviderValidator
+from network.validators import LinkFactoryProviderValidator, LinkFactoryDebtValidator
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -17,7 +17,8 @@ class LinkCreateSerializer(serializers.ModelSerializer):
         model = Link
         exclude = ('level',)
         validators = [
-            LinkFactoryProviderValidator(field_1='link_type', field_2='provider')
+            LinkFactoryProviderValidator(field_1='link_type', field_2='provider'),
+            LinkFactoryDebtValidator(field_1='link_type', field_2='debt'),
         ]
 
     def create(self, validated_data):
@@ -45,7 +46,8 @@ class LinkUpdateSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('debt', 'level', )
         validators = [
-            LinkFactoryProviderValidator(field_1='link_type', field_2='provider')
+            LinkFactoryProviderValidator(field_1='link_type', field_2='provider'),
+            LinkFactoryDebtValidator(field_1='link_type', field_2='debt'),
         ]
 
     def update(self, instance, validated_data):
