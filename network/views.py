@@ -24,3 +24,8 @@ class LinkCreateAPIView(generics.CreateAPIView):
 class LinkListAPIView(generics.ListAPIView):
     serializer_class = LinkSerializer
     queryset = Link.objects.all()
+
+
+class LinkRetrieveAPIView(generics.RetrieveAPIView):
+    serializer_class = LinkSerializer
+    queryset = Link.objects.all()
