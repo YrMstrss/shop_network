@@ -24,7 +24,8 @@ class Link(models.Model):
     name = models.CharField(max_length=30, verbose_name='название')
     products = models.ManyToManyField(Product, blank=True, verbose_name='продукты')
     provider = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name='поставщик', blank=True, null=True)
-    debt = models.DecimalField(max_digits=11, decimal_places=2, verbose_name='задолженность перед поставщиком')
+    debt = models.DecimalField(max_digits=11, decimal_places=2, verbose_name='задолженность перед поставщиком',
+                               blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     level = models.IntegerField(default=0, verbose_name='уровень иерархии')
 
@@ -43,7 +44,8 @@ class Contact(models.Model):
     street = models.CharField(max_length=100, verbose_name='улица')
     building = models.CharField(max_length=5, verbose_name='номер дома')
 
-    link = models.OneToOneField(Link, on_delete=models.CASCADE, related_name='contact', verbose_name='звено', null=True, blank=True)
+    link = models.OneToOneField(Link, on_delete=models.CASCADE, related_name='contact', verbose_name='звено', null=True,
+                                blank=True)
 
     def __str__(self):
         return f'{self.email}'
