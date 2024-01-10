@@ -14,7 +14,7 @@ class LinkCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Link
-        exclude = ('level', )
+        exclude = ('level',)
 
     def create(self, validated_data):
         contact = validated_data.pop('contact')
@@ -31,3 +31,23 @@ class LinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Link
         fields = '__all__'
+
+
+class LinkUpdateSerializer(serializers.ModelSerializer):
+    contact = ContactSerializer()
+
+    class Meta:
+        model = Link
+        fields = '__all__'
+        read_only_fields = ('debt', 'level', )
+
+    def update(self, instance, validated_data):
+        if 'contact' in validated_data.keys():
+            contact = validated_data.pop('contact')
+
+            super().update(instance, validated_data)
+            super().update(instance.contact, contact)
+        else:
+            super().update(instance, validated_data)
+
+        return instance
