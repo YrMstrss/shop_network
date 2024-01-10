@@ -34,3 +34,7 @@ class LinkRetrieveAPIView(generics.RetrieveAPIView):
 class LinkUpdateAPIVIew(generics.UpdateAPIView):
     serializer_class = LinkUpdateSerializer
     queryset = Link.objects.all()
+
+
+class LinkDestroyAPIView(generics.DestroyAPIView):
+    queryset = Link.objects.all()
