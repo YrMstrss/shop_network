@@ -13,7 +13,7 @@ class ContactSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        exclude = ('start_sales_date', )
+        fields = '__all__'
 
 
 class FactoryCreateSerializer(serializers.ModelSerializer):
@@ -43,8 +43,35 @@ class FactoryCreateSerializer(serializers.ModelSerializer):
         return link
 
 
+class LinkCreateSerializer(serializers.ModelSerializer):
+    contact = ContactSerializer()
+    products = ProductSerializer(many=True)
+
+    class Meta:
+        model = Link
+        exclude = ('level',)
+        validators = [
+            LinkFactoryProviderValidator(field_1='link_type', field_2='provider'),
+            LinkFactoryDebtValidator(field_1='link_type', field_2='debt'),
+        ]
+
+    def create(self, validated_data):
+        contact = validated_data.pop('contact')
+        products = validated_data.pop('products')
+
+        link = Link.objects.create(**validated_data)
+        Contact.objects.create(**contact, link=link)
+
+        for product in products:
+            prod = Product.objects.get(**product)
+            link.products.add(prod)
+
+        return link
+
+
 class LinkSerializer(serializers.ModelSerializer):
     contact = ContactSerializer()
+    products = ProductSerializer(many=True)
 
     class Meta:
         model = Link
@@ -53,11 +80,12 @@ class LinkSerializer(serializers.ModelSerializer):
 
 class LinkUpdateSerializer(serializers.ModelSerializer):
     contact = ContactSerializer()
+    products = ProductSerializer()
 
     class Meta:
         model = Link
         fields = '__all__'
-        read_only_fields = ('debt', 'level', )
+        read_only_fields = ('debt', 'level',)
         validators = [
             LinkFactoryProviderValidator(field_1='link_type', field_2='provider'),
             LinkFactoryDebtValidator(field_1='link_type', field_2='debt'),
