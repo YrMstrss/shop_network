@@ -2,11 +2,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 
 from network.models import Link
-from network.serializers import LinkSerializer, LinkCreateSerializer, LinkUpdateSerializer
+from network.serializers import LinkSerializer, FactoryCreateSerializer, LinkUpdateSerializer
 
 
-class LinkCreateAPIView(generics.CreateAPIView):
-    serializer_class = LinkCreateSerializer
+class FactoryCreateAPIView(generics.CreateAPIView):
+    serializer_class = FactoryCreateSerializer
 
     def perform_create(self, serializer):
         link = serializer.save()

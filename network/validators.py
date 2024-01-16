@@ -1,6 +1,17 @@
 from rest_framework.exceptions import ValidationError
 
 
+class FactoryValidator:
+
+    def __init__(self, field):
+        self.field = field
+
+    def __call__(self, value):
+        tmp_value = dict(value).get(self.field)
+        if not tmp_value == 'Factory':
+            raise ValidationError('Создаваемое звено сети должно быть заводом')
+
+
 class LinkFactoryProviderValidator:
 
     """Валидатор для проверки отсутствия у завода поставщика"""

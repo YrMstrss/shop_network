@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from network.models import Link, Contact, Product
-from network.validators import LinkFactoryProviderValidator, LinkFactoryDebtValidator
+from network.validators import LinkFactoryProviderValidator, LinkFactoryDebtValidator, FactoryValidator
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class ProductSerializer(serializers.ModelSerializer):
         exclude = ('start_sales_date', )
 
 
-class LinkCreateSerializer(serializers.ModelSerializer):
+class FactoryCreateSerializer(serializers.ModelSerializer):
     contact = ContactSerializer()
     products = ProductSerializer(many=True)
 
@@ -24,6 +24,7 @@ class LinkCreateSerializer(serializers.ModelSerializer):
         model = Link
         exclude = ('level',)
         validators = [
+            FactoryValidator(field='link_type'),
             LinkFactoryProviderValidator(field_1='link_type', field_2='provider'),
             LinkFactoryDebtValidator(field_1='link_type', field_2='debt'),
         ]
