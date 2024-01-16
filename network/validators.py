@@ -12,7 +12,7 @@ class FactoryValidator:
             raise ValidationError('Создаваемое звено сети должно быть заводом')
 
 
-class LinkFactoryProviderValidator:
+class LinkProviderValidator:
 
     """Валидатор для проверки отсутствия у завода поставщика"""
 
@@ -26,6 +26,10 @@ class LinkFactoryProviderValidator:
 
         if tmp_value_1 == 'Factory' and tmp_value_2:
             raise ValidationError('У завода не должно быть поставщика')
+
+        if tmp_value_1 == 'Company' or tmp_value_1 == 'Retail':
+            if not tmp_value_2:
+                raise ValidationError('ИП или розничная сеть должны иметь поставщика')
 
 
 class LinkFactoryDebtValidator:
