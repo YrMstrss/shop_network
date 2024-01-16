@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from network.models import Link, Contact
+from network.models import Link, Contact, Product
 from network.validators import LinkFactoryProviderValidator, LinkFactoryDebtValidator
 
 
@@ -10,8 +10,15 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        exclude = ('start_sales_date', )
+
+
 class LinkCreateSerializer(serializers.ModelSerializer):
     contact = ContactSerializer()
+    products = ProductSerializer(many=True)
 
     class Meta:
         model = Link
@@ -23,9 +30,14 @@ class LinkCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         contact = validated_data.pop('contact')
+        products = validated_data.pop('products')
 
         link = Link.objects.create(**validated_data)
         Contact.objects.create(**contact, link=link)
+
+        for product in products:
+            prod = Product.objects.create(**product)
+            link.products.add(prod)
 
         return link
 
