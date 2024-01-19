@@ -2,6 +2,9 @@ from django.db import models
 
 
 class Product(models.Model):
+    """
+    Модель продаваемого продукта
+    """
     name = models.CharField(max_length=50, verbose_name='название')
     model = models.CharField(max_length=50, verbose_name='модель')
     start_sales_date = models.DateField(auto_now_add=True, verbose_name='дата начала продаж')
@@ -15,6 +18,9 @@ class Product(models.Model):
 
 
 class Link(models.Model):
+    """
+    Модель звена сети
+    """
     class LinkType(models.TextChoices):
         factory = 'Factory', 'Завод'
         company = 'Company', 'ИП'
@@ -38,6 +44,9 @@ class Link(models.Model):
 
 
 class Contact(models.Model):
+    """
+    Модель контактов звена сети
+    """
     email = models.EmailField(verbose_name='email')
     country = models.CharField(max_length=50, verbose_name='страна')
     city = models.CharField(max_length=100, verbose_name='город')

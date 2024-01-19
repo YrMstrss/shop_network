@@ -7,20 +7,36 @@ from network.serializers import LinkSerializer, FactoryCreateSerializer, LinkUpd
 
 
 class FactoryCreateAPIView(generics.CreateAPIView):
+    """
+    Контроллер для создания завода
+    """
     serializer_class = FactoryCreateSerializer
     permission_classes = [IsActive]
 
     def perform_create(self, serializer):
+        """
+        Метод устанавливающий уровень завода в иерархии = 0
+        :param serializer: Сериалайзер для создания завода
+        :return: None
+        """
         link = serializer.save()
         link.level = 0
         link.save()
 
 
 class LinkCreateAPIView(generics.CreateAPIView):
+    """
+    Контроллер для создания звена сети
+    """
     serializer_class = LinkCreateSerializer
     permission_classes = [IsActive]
 
     def perform_create(self, serializer):
+        """
+        Метод устанавливающий уровень звена в иерархии сети
+        :param serializer: Сериалайзер для создания звена сети
+        :return: None
+        """
         link = serializer.save()
         if link.link_type == 'Factory':
             link.level = 0
@@ -35,6 +51,9 @@ class LinkCreateAPIView(generics.CreateAPIView):
 
 
 class LinkListAPIView(generics.ListAPIView):
+    """
+    Контроллер для просмотра списка всех звеньев сети с возможностью фильтрации по стране
+    """
     serializer_class = LinkSerializer
     queryset = Link.objects.all()
     permission_classes = [IsActive]
@@ -43,17 +62,26 @@ class LinkListAPIView(generics.ListAPIView):
 
 
 class LinkRetrieveAPIView(generics.RetrieveAPIView):
+    """
+    Контроллер для просмотра отдельного звена сети
+    """
     serializer_class = LinkSerializer
     queryset = Link.objects.all()
     permission_classes = [IsActive]
 
 
 class LinkUpdateAPIVIew(generics.UpdateAPIView):
+    """
+    Контроллер для обновления данных о звене сети
+    """
     serializer_class = LinkUpdateSerializer
     queryset = Link.objects.all()
     permission_classes = [IsActive]
 
 
 class LinkDestroyAPIView(generics.DestroyAPIView):
+    """
+    Контроллер для удаления звена сети
+    """
     queryset = Link.objects.all()
     permission_classes = [IsActive]

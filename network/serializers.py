@@ -5,18 +5,27 @@ from network.validators import LinkProviderValidator, LinkFactoryDebtValidator, 
 
 
 class ContactSerializer(serializers.ModelSerializer):
+    """
+    Сериалайзер модели контакта
+    """
     class Meta:
         model = Contact
         fields = '__all__'
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    """
+    Сериалайзер модели продукта
+    """
     class Meta:
         model = Product
         fields = '__all__'
 
 
 class FactoryCreateSerializer(serializers.ModelSerializer):
+    """
+    Сериалайзер для создания завода
+    """
     contact = ContactSerializer()
     products = ProductSerializer(many=True)
 
@@ -30,6 +39,12 @@ class FactoryCreateSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
+        """
+        Метод, позволяющий при создании завода создавать так же связанные с ним объекты контактов и производимых
+        продуктов
+        :param validated_data: Отвалидированные данные
+        :return: Созданный объект Link
+        """
         contact = validated_data.pop('contact')
         products = validated_data.pop('products')
 
@@ -44,6 +59,9 @@ class FactoryCreateSerializer(serializers.ModelSerializer):
 
 
 class LinkCreateSerializer(serializers.ModelSerializer):
+    """
+    Сериалайзер для создания звеньев сети, не являющихся заводом
+    """
     contact = ContactSerializer()
     products = ProductSerializer(many=True)
 
@@ -56,6 +74,12 @@ class LinkCreateSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
+        """
+        Метод, позволяющий при создании звена сети создавать так же связанные с ним объекты контактов и добавлять
+        продукты
+        :param validated_data: Отвалидированные данные
+        :return: Созданный объект Link
+        """
         contact = validated_data.pop('contact')
         products = validated_data.pop('products')
 
@@ -70,6 +94,9 @@ class LinkCreateSerializer(serializers.ModelSerializer):
 
 
 class LinkSerializer(serializers.ModelSerializer):
+    """
+    Сериалайзер для вывода и удаления объекты Link
+    """
     contact = ContactSerializer()
     products = ProductSerializer(many=True)
 
@@ -79,6 +106,9 @@ class LinkSerializer(serializers.ModelSerializer):
 
 
 class LinkUpdateSerializer(serializers.ModelSerializer):
+    """
+    Сериалайзер для редактирования объектов Link
+    """
     contact = ContactSerializer()
     products = ProductSerializer()
 
@@ -92,6 +122,12 @@ class LinkUpdateSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
+        """
+        Метод для обновления данных о существующем звене сети Link и контактной информации
+        :param instance: Изменяемый объект Link
+        :param validated_data: Отвалидированные данные
+        :return: Измененный объект Link
+        """
         if 'contact' in validated_data.keys():
             contact = validated_data.pop('contact')
 
